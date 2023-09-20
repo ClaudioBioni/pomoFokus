@@ -111,6 +111,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .app__card-button.active {
     border-radius: 0.8rem;
+    transition: 0.5s;
     background: var(--azul-royal);
     font-weight: 600;
 }

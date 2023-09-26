@@ -3,6 +3,8 @@ const focoBt = document.querySelector('.app__card-button--foco')
 const curtoBt = document.querySelector('.app__card-button--curto')
 const longoBt = document.querySelector('.app__card-button--longo')
 const banner = document.querySelector('.app__image')
+const pauseIcon = document.querySelector('.app__card-primary-butto-icon')
+const playIcon = document.querySelector('.app__card-primary-butto-icon')
 const titulo = document.querySelector('.app__title')
 const botoes = document.querySelectorAll('.app__card-button')
 const startPauseBt = document.querySelector('#start-pause')
@@ -10,8 +12,15 @@ const musicaFocoInput = document.querySelector('#alternar-musica')
 const musica = new Audio('/sons/luna-rise-part-one.mp3')
 const somStartInput = document.querySelector('#start-pause')
 const somStart = new Audio('/sons/play.wav')
+const iniciarOuPausarBt = document.querySelector('#start-pause span')
+const tempoNaTela = document.querySelector('#timer')
 
-let tempoDecorridoEmSegundos = 5
+const audioPlay = new Audio('/sons/play.wav');
+const audioPausa = new Audio('/sons/pause.mp3');
+const audioTempoFinalizado = new Audio('/sons/beep.mp3')
+
+
+let tempoDecorridoEmSegundos = 1500
 let intervaloId = null
 
 musica.loop = true
@@ -33,21 +42,25 @@ somStartInput.addEventListener('change', () => {
 })
 
 focoBt.addEventListener('click', () => {
+    tempoDecorridoEmSegundos = 1500
     alterarContexto('foco')
     focoBt.classList.add('active')
 })
 
 curtoBt.addEventListener('click', () => {
+    tempoDecorridoEmSegundos = 300
     alterarContexto('descanso-curto')
     curtoBt.classList.add('active')
 })
 
 longoBt.addEventListener('click', () => {
+    tempoDecorridoEmSegundos = 900
     alterarContexto('descanso-longo')
     longoBt.classList.add('active')
 })
 
 function alterarContexto(contexto) {
+    mostrarTempo()
     botoes.forEach(function (contexto) {
         contexto.classList.remove('active')
     })
@@ -71,28 +84,37 @@ function alterarContexto(contexto) {
 
 const contagemRegressiva = () => {
     if(tempoDecorridoEmSegundos <= 0) {
-        zerar()
+        audioTempoFinalizado.play()
         alert('Tempo Finalizado!')
+        zerar()
         return
     }
     tempoDecorridoEmSegundos -= 1
-    console.log('Temporizador: ' + tempoDecorridoEmSegundos)
+    mostrarTempo()
 }
 
 startPauseBt.addEventListener('click', iniciarOuPausar)
 
 function iniciarOuPausar() {
     if(intervaloId) {
+        audioPausa.play()
         zerar()
         return
     }
+    audioPlay.play()
     intervaloId = setInterval(contagemRegressiva, 1000)
+    iniciarOuPausarBt.textContent = "Pausar"
+    pauseIcon.setAttribute('src', `./imagens/pause.png`)
 }
 
 function zerar() {
     clearInterval(intervaloId)
     intervaloId = null
+    musica.pause()
+    iniciarOuPausarBt.textContent = "Começar"
+    pauseIcon.setAttribute('src', `./imagens/play_arrow.png`)
 }
+
 
 somStartInput.addEventListener('change', () => {
     if(somStart.paused) {
@@ -101,3 +123,11 @@ somStartInput.addEventListener('change', () => {
         somStart.pause()
     }
 })
+
+function mostrarTempo() {
+    const tempo = new Date(tempoDecorridoEmSegundos * 1000)
+    const tempoFormatado = tempo.toLocaleTimeString('pt-br', {minute: '2-digit', second: '2-digit'})
+    tempoNaTela.innerHTML = `${tempoFormatado}`
+}
+
+mostrarTempo()

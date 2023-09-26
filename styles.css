@@ -235,6 +235,10 @@ h1, h2, h3, h4, h5, h6 {
     .app__section-banner-container {
         width: 48rem;
     }
+
+    .app__title {
+        text-align: center;
+    }
 }
 
 /* Para Celulares */
@@ -245,6 +249,7 @@ h1, h2, h3, h4, h5, h6 {
 
     .app__title {
         font-size: 2.6rem;
+        text-align: center;
     }
 
     .app__card-timer {

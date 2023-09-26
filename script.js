@@ -14,7 +14,6 @@ const somStartInput = document.querySelector('#start-pause')
 const somStart = new Audio('/sons/play.wav')
 const iniciarOuPausarBt = document.querySelector('#start-pause span')
 const tempoNaTela = document.querySelector('#timer')
-
 const audioPlay = new Audio('/sons/play.wav');
 const audioPausa = new Audio('/sons/pause.mp3');
 const audioTempoFinalizado = new Audio('/sons/beep.mp3')
